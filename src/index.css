@@ -1,0 +1,73 @@
+@import "@fontsource/caveat/400.css";
+@import "@fontsource/caveat/500.css";
+@import "@fontsource/caveat/600.css";
+@import "@fontsource/dancing-script/400.css";
+@import "@fontsource/dancing-script/500.css";
+@import "@fontsource/dancing-script/700.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --ink: #2e2118;
+  --ink-soft: #6b5744;
+  --ink-faint: #a08c78;
+  --paper: #f5ede0;
+  --paper-warm: #efe4d0;
+  --paper-dark: #e0d0b8;
+  --blush: #e8a89c;
+  --blush-pale: #f5d0c8;
+  --sage: #8fad91;
+  --gold: #c9963c;
+  --gold-pale: #f0deb0;
+
+  font-family: "Caveat", cursive;
+  font-size: 18px;
+  color: var(--ink);
+  background: var(--paper);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100svh;
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+button,
+a {
+  font: inherit;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--blush-pale);
+  color: var(--ink);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--paper-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--blush);
+  border-radius: 3px;
+}

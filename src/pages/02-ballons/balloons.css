@@ -1,0 +1,344 @@
+/* ══════════════════════════════════════════════
+   CHAPTER 2 — 22 Balloons
+   Matches the warm paper · handwritten theme
+══════════════════════════════════════════════ */
+
+.balloons-page {
+  position: relative;
+  z-index: 2;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Mount animation (same as birthday-page) ── */
+.balloons-page > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+}
+.balloons-page.is-mounted > * {
+  opacity: 1;
+  transform: none;
+}
+.balloons-page.is-mounted .topbar {
+  transition-delay: 0.05s;
+}
+.balloons-page.is-mounted .balloons-header {
+  transition-delay: 0.2s;
+}
+.balloons-page.is-mounted .balloons-field {
+  transition-delay: 0.4s;
+}
+.balloons-page.is-mounted .balloons-footer {
+  transition-delay: 0.6s;
+}
+
+/* ── Header ── */
+.balloons-header {
+  text-align: center;
+  padding: 36px 24px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.balloons-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Caveat", cursive;
+  font-size: 15px;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+}
+
+.balloons-title {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+.balloons-subtitle {
+  font-family: "Caveat", cursive;
+  font-size: 18px;
+  color: var(--ink-soft);
+  max-width: 38ch;
+  line-height: 1.5;
+}
+
+.balloons-counter {
+  font-family: "Caveat", cursive;
+  font-size: 16px;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+.balloons-counter span {
+  color: var(--blush);
+  font-weight: 600;
+}
+
+/* ── Field where balloons float ── */
+.balloons-field {
+  flex: 1;
+  position: relative;
+  min-height: 520px;
+  padding: 20px 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Balloon float animation ── */
+@keyframes balloonFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-1deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(1.2deg);
+  }
+  66% {
+    transform: translateY(-5px) rotate(-0.5deg);
+  }
+}
+
+/* ── Individual balloon wrapper ── */
+.balloon-wrap {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transform-origin: bottom center;
+  /* float animation applied inline via style */
+}
+
+.balloon-wrap:not(.popped):hover .balloon-body {
+  transform: scale(1.08);
+  filter: brightness(1.06);
+}
+
+/* ── Balloon SVG body ── */
+.balloon-body {
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease;
+  display: block;
+  transform-origin: center bottom;
+  /* width/height set in JSX */
+}
+
+/* ── Balloon string ── */
+.balloon-string {
+  width: 1.5px;
+  height: 32px;
+  background: linear-gradient(
+    to bottom,
+    rgba(100, 80, 60, 0.5),
+    rgba(100, 80, 60, 0.2)
+  );
+  border-radius: 1px;
+}
+
+/* ── Pop burst ── */
+.balloon-wrap.popped .balloon-body {
+  animation: popBurst 0.35s ease-out forwards;
+}
+
+@keyframes popBurst {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  25% {
+    transform: scale(1.18);
+    opacity: 0.9;
+  }
+  60% {
+    transform: scale(0.7);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* ── Confetti pieces ── */
+.confetti-piece {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  pointer-events: none;
+  animation: confettiFly 0.9s ease-out forwards;
+}
+
+@keyframes confettiFly {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: var(--tx) var(--ty) rotate(var(--tr));
+    opacity: 0;
+  }
+}
+
+/* ── Note card that appears after pop ── */
+.balloon-note {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(245, 237, 224, 0.96);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(201, 150, 60, 0.2);
+  border-radius: 18px;
+  padding: 20px 22px 18px;
+  width: 190px;
+  text-align: center;
+  box-shadow:
+    0 6px 32px rgba(46, 33, 24, 0.12),
+    0 1px 0 rgba(255, 255, 255, 0.7) inset;
+  animation: noteReveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes noteReveal {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7) rotate(-4deg);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+}
+
+.balloon-note-number {
+  font-family: "Dancing Script", cursive;
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+
+.balloon-note-text {
+  font-family: "Dancing Script", cursive;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.balloon-note-heart {
+  margin-top: 8px;
+  color: var(--blush);
+  display: flex;
+  justify-content: center;
+}
+
+/* ── All-popped celebration ── */
+.celebration-banner {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 200;
+  background: radial-gradient(
+    circle,
+    rgba(245, 237, 224, 0.97) 0%,
+    rgba(239, 228, 208, 0.99) 100%
+  );
+  animation: fadeIn 0.6s ease;
+  text-align: center;
+  padding: 32px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.celebration-banner h2 {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.celebration-banner p {
+  font-family: "Caveat", cursive;
+  font-size: 20px;
+  color: var(--ink-soft);
+  max-width: 36ch;
+  line-height: 1.5;
+}
+
+.celebration-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 100px;
+  padding: 13px 24px;
+  font-family: "Caveat", cursive;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    transform 0.2s;
+  margin-top: 8px;
+}
+.celebration-next:hover {
+  background: var(--ink-soft);
+  transform: translateY(-2px);
+}
+
+/* ── Footer ── */
+.balloons-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 40px 20px;
+  font-size: 14px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  border-top: 1px solid rgba(160, 140, 120, 0.12);
+  background: linear-gradient(to top, rgba(239, 228, 208, 0.6), transparent);
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .balloon-note {
+    width: 160px;
+    padding: 16px 16px 14px;
+  }
+  .balloon-note-text {
+    font-size: 16px;
+  }
+}

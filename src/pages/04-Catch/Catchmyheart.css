@@ -1,0 +1,420 @@
+/* ══════════════════════════════════════════════
+   CHAPTER 4 — Catch My Heart
+   Warm paper · playful · intimate
+══════════════════════════════════════════════ */
+
+.catch-page {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+/* ── Mount animation ── */
+.catch-page > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+.catch-page.is-mounted > * {
+  opacity: 1;
+  transform: none;
+}
+.catch-page.is-mounted .topbar {
+  transition-delay: 0.05s;
+}
+.catch-page.is-mounted .ch4-header {
+  transition-delay: 0.2s;
+}
+.catch-page.is-mounted .game-wrap {
+  transition-delay: 0.35s;
+}
+.catch-page.is-mounted .ch4-footer {
+  transition-delay: 0.5s;
+}
+
+/* ── Header ── */
+.ch4-header {
+  text-align: center;
+  padding: 28px 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ch4-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Caveat", cursive;
+  font-size: 15px;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+}
+
+.ch4-title {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(30px, 4.5vw, 52px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+.ch4-subtitle {
+  font-family: "Caveat", cursive;
+  font-size: 17px;
+  color: var(--ink-soft);
+  max-width: 40ch;
+  line-height: 1.5;
+}
+
+/* ── Love meter ── */
+.love-meter-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px 0;
+}
+
+.love-meter-label {
+  font-family: "Caveat", cursive;
+  font-size: 15px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.love-meter-track {
+  width: min(280px, 55vw);
+  height: 14px;
+  background: rgba(160, 140, 120, 0.18);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(160, 140, 120, 0.25);
+  position: relative;
+}
+
+.love-meter-fill {
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f5c8c0, #e8a89c, #d4828f);
+  transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.love-meter-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.love-meter-icon {
+  color: var(--blush);
+  flex-shrink: 0;
+}
+
+/* ── Game canvas wrap ── */
+.game-wrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px 8px;
+  min-height: 0;
+}
+
+.game-canvas-container {
+  position: relative;
+  width: min(560px, 96vw);
+  /* height set inline via JS */
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1.5px solid rgba(160, 140, 120, 0.2);
+  box-shadow:
+    0 8px 40px rgba(46, 33, 24, 0.1),
+    0 1px 0 rgba(255, 255, 255, 0.7) inset;
+  background: linear-gradient(
+    160deg,
+    rgba(245, 237, 224, 0.6) 0%,
+    rgba(239, 228, 208, 0.8) 100%
+  );
+  cursor: none;
+}
+
+/* actual canvas element */
+.game-canvas-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ── Overlay screens ── */
+.game-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(245, 237, 224, 0.92);
+  backdrop-filter: blur(12px);
+  border-radius: 22px;
+  text-align: center;
+  padding: 32px 24px;
+  z-index: 20;
+}
+
+.overlay-icon {
+  color: var(--blush);
+  animation: pulseHeart 1.4s ease-in-out infinite;
+}
+
+@keyframes pulseHeart {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+.overlay-title {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.overlay-sub {
+  font-family: "Caveat", cursive;
+  font-size: 17px;
+  color: var(--ink-soft);
+  max-width: 30ch;
+  line-height: 1.5;
+}
+
+.overlay-keys {
+  font-family: "Caveat", cursive;
+  font-size: 14px;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.key-chip {
+  background: var(--paper-dark);
+  border: 1px solid rgba(160, 140, 120, 0.3);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-family: "Caveat", cursive;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.overlay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 100px;
+  padding: 12px 24px;
+  font-family: "Caveat", cursive;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    transform 0.2s;
+  box-shadow: 0 4px 18px rgba(46, 33, 24, 0.18);
+}
+.overlay-btn:hover {
+  background: var(--ink-soft);
+  transform: translateY(-2px);
+}
+.overlay-btn.blush {
+  background: linear-gradient(135deg, #e8a89c, #d4828f);
+  box-shadow: 0 4px 18px rgba(232, 168, 156, 0.4);
+}
+
+/* ── Score pill ── */
+.score-pill {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: rgba(245, 237, 224, 0.88);
+  border: 1px solid rgba(201, 150, 60, 0.2);
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-family: "Caveat", cursive;
+  font-size: 15px;
+  color: var(--ink-soft);
+  z-index: 10;
+  backdrop-filter: blur(6px);
+}
+.score-pill span {
+  color: var(--blush);
+  font-weight: 600;
+}
+
+/* ── 3D heart rain canvas (finale) ── */
+.heart-rain-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* ── Finale overlay ── */
+.finale-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+  padding: 32px;
+  background: radial-gradient(
+    circle at center,
+    rgba(245, 237, 224, 0.15) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: fadeIn 0.8s ease;
+}
+
+.finale-overlay.interactive {
+  pointer-events: all;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.finale-title {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(38px, 6vw, 72px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+  text-shadow: 0 2px 20px rgba(245, 237, 224, 0.9);
+}
+
+.finale-title em {
+  color: var(--blush);
+  font-style: italic;
+}
+
+.finale-sub {
+  font-family: "Caveat", cursive;
+  font-size: 20px;
+  color: var(--ink-soft);
+  max-width: 34ch;
+  line-height: 1.5;
+  text-shadow: 0 1px 12px rgba(245, 237, 224, 0.8);
+}
+
+.finale-score {
+  font-family: "Dancing Script", cursive;
+  font-size: 22px;
+  color: var(--ink-faint);
+  text-shadow: 0 1px 8px rgba(245, 237, 224, 0.9);
+}
+
+.finale-score strong {
+  color: var(--gold);
+}
+
+.finale-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 100px;
+  padding: 14px 28px;
+  font-family: "Caveat", cursive;
+  font-size: 19px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    transform 0.2s;
+  box-shadow: 0 4px 24px rgba(46, 33, 24, 0.22);
+  margin-top: 8px;
+}
+.finale-next:hover {
+  background: var(--ink-soft);
+  transform: translateY(-2px);
+}
+
+/* ── Footer ── */
+.ch4-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 40px 18px;
+  font-size: 14px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  border-top: 1px solid rgba(160, 140, 120, 0.12);
+  background: linear-gradient(to top, rgba(239, 228, 208, 0.6), transparent);
+}
+
+/* ── Mobile touch hint ── */
+.touch-hint {
+  font-family: "Caveat", cursive;
+  font-size: 13px;
+  color: var(--ink-faint);
+  text-align: center;
+  padding: 4px 0 0;
+}
+
+@media (max-width: 600px) {
+  .ch4-header {
+    padding: 20px 20px 0;
+  }
+  .love-meter-wrap {
+    padding: 10px 20px 0;
+  }
+}

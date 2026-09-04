@@ -1,11 +1,23 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ArrowUpRight, Heart, Sparkles, CakeSlice, Music2 } from "lucide-react";
 import * as THREE from "three";
 import "./App.css";
 import BalloonsPage from "./pages/02-ballons/BalloonsPage.jsx";
+import ScrollPage from "./pages/03-scroll/Scrollpage.jsx";
+import CatchMyHeart from "./pages/04-Catch/Catchmyheart.jsx";
+import FearFundaPage from "./pages/05-fear/fearFunda.jsx";
+import birthdayMusic from "./assets/bayside-breeze.mp3";
 
+// Pages with their own audio controls manage music locally.
+const MUSIC_EXCLUDED_PATHS = ["/chapter/3"];
 /* ─────────────────────────────────────────────
    THREE.JS — Floating petal particle field
 ───────────────────────────────────────────── */
@@ -453,15 +465,118 @@ function Chapter2Wrapper() {
   );
 }
 
+function Chapter3Wrapper() {
+  const navigate = useNavigate();
+  return (
+    <>
+      {/* Shared paper bg behind the scroll page */}
+      <div className="canvas-wrap" aria-hidden="true">
+        <ThreeCanvas />
+      </div>
+      <ScrollPage onNext={() => navigate("/chapter/4")} />
+    </>
+  );
+}
+
+function Chapter4Wrapper() {
+  const navigate = useNavigate();
+  return (
+    <>
+      {/* Shared paper bg behind the scroll page */}
+      <div className="canvas-wrap" aria-hidden="true">
+        <ThreeCanvas />
+      </div>
+      <CatchMyHeart onNext={() => navigate("/chapter/5")} />
+    </>
+  );
+}
+
+function Chapter5Wrapper() {
+  const navigate = useNavigate();
+  return (
+    <>
+      {/* Shared paper bg behind the scroll page */}
+      <div className="canvas-wrap" aria-hidden="true">
+        <ThreeCanvas />
+      </div>
+      <FearFundaPage onNext={() => navigate("/chapter/6")} />
+    </>
+  );
+}
+
+function SharedMusic() {
+  const { pathname } = useLocation();
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const isExcluded = MUSIC_EXCLUDED_PATHS.includes(pathname);
+  const musicSource = birthdayMusic;
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return undefined;
+
+    audio.loop = true;
+
+    if (isExcluded) {
+      audio.pause();
+      setIsPlaying(false);
+      return undefined;
+    }
+
+    audio.load();
+
+    const startMusic = () => {
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setIsPlaying(false));
+    };
+
+    startMusic();
+    window.addEventListener("pointerdown", startMusic, { once: true });
+    return () => window.removeEventListener("pointerdown", startMusic);
+  }, [isExcluded, musicSource]);
+
+  const toggleMusic = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (audio.paused) {
+      audio.play().then(() => setIsPlaying(true));
+    } else {
+      audio.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  return (
+    <>
+      <audio ref={audioRef} src={musicSource} preload="auto" loop />
+      <button
+        className="music-toggle"
+        type="button"
+        onClick={toggleMusic}
+        aria-label={isPlaying ? "Pause birthday music" : "Play birthday music"}
+      >
+        <Music2 size={15} />
+        <span>{isPlaying ? "music on" : "play music"}</span>
+      </button>
+    </>
+  );
+}
+
 /* ─────────────────────────────────────────────
    Router root
 ───────────────────────────────────────────── */
 export default function App() {
   return (
     <BrowserRouter>
+      <SharedMusic />
       <Routes>
         <Route path="/" element={<CoverPage />} />
         <Route path="/chapter/2" element={<Chapter2Wrapper />} />
+        <Route path="/chapter/3" element={<Chapter3Wrapper />} />
+        <Route path="/chapter/4" element={<Chapter4Wrapper />} />
+        <Route path="/chapter/5" element={<Chapter5Wrapper />} />
         {/* Add /chapter/3 … /chapter/22 here as you build them */}
       </Routes>
     </BrowserRouter>

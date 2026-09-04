@@ -216,6 +216,42 @@
   z-index: 10;
 }
 
+/* Keep notes on the field when balloons sit at either edge. */
+.note-edge-left .balloon-note {
+  left: 0;
+  transform: translate(0, -50%);
+  animation-name: noteRevealLeft;
+}
+
+.note-edge-right .balloon-note {
+  left: auto;
+  right: 0;
+  transform: translate(0, -50%);
+  animation-name: noteRevealRight;
+}
+
+@keyframes noteRevealLeft {
+  from {
+    opacity: 0;
+    transform: translate(0, -50%) scale(0.7) rotate(-4deg);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, -50%) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes noteRevealRight {
+  from {
+    opacity: 0;
+    transform: translate(0, -50%) scale(0.7) rotate(4deg);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, -50%) scale(1) rotate(0deg);
+  }
+}
+
 @keyframes noteReveal {
   from {
     opacity: 0;

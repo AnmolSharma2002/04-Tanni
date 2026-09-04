@@ -258,11 +258,13 @@ export default function BalloonsPage({ onNext }) {
             return (
               <div
                 key={i}
-                className={`balloon-wrap ${isPopped ? "popped" : ""}`}
+                className={`balloon-wrap ${isPopped ? "popped" : ""} ${
+                  item.x < 15 ? "note-edge-left" : ""
+                } ${item.x > 85 ? "note-edge-right" : ""}`}
                 style={{
                   left: `${item.x}%`,
                   top: `${item.y}%`,
-                  zIndex: activeBalloon === i ? 100 : isPopped ? 10 : 1,
+                  zIndex: activeBalloon === i ? 300 : isPopped ? 10 : 200,
                   // float animation via CSS custom props
                   animation: isPopped
                     ? "none"

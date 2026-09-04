@@ -437,6 +437,22 @@
     padding: 32px 28px 48px;
     gap: 32px;
   }
+  .intro-copy {
+    align-items: center;
+    text-align: center;
+  }
+  .eyebrow {
+    justify-content: center;
+  }
+  .lead {
+    max-width: 38ch;
+  }
+  .ink-rule {
+    margin-inline: auto;
+  }
+  .open-button {
+    align-self: center;
+  }
   .topbar {
     padding: 14px 24px 12px;
   }
@@ -471,5 +487,39 @@
   }
   .intro {
     padding: 24px 20px 40px;
+  }
+}
+.music-toggle {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  color: var(--ink);
+  background: rgba(248, 243, 232, 0.88);
+  box-shadow: 0 4px 16px rgba(63, 56, 49, 0.1);
+  cursor: pointer;
+  font-size: 15px;
+  backdrop-filter: blur(8px);
+}
+
+.music-toggle:hover {
+  color: var(--coral);
+  border-color: var(--coral);
+}
+.music-toggle:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 3px;
+}
+
+@media (max-width: 720px) {
+  .music-toggle {
+    right: 14px;
+    bottom: 14px;
   }
 }

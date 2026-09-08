@@ -1,0 +1,557 @@
+/* ══════════════════════════════════════════════
+   CHAPTER 7 — I ♡ U Puzzle
+   Warm paper · playful · intimate
+══════════════════════════════════════════════ */
+
+.puzzle-page {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  background: var(--paper);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Mount animation ── */
+.puzzle-page > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+.puzzle-page.is-mounted > * {
+  opacity: 1;
+  transform: none;
+}
+.puzzle-page.is-mounted .topbar {
+  transition-delay: 0.04s;
+}
+.puzzle-page.is-mounted .puzzle-header {
+  transition-delay: 0.18s;
+}
+.puzzle-page.is-mounted .puzzle-stage {
+  transition-delay: 0.32s;
+}
+.puzzle-page.is-mounted .puzzle-footer {
+  transition-delay: 0.5s;
+}
+
+/* ── Header ── */
+.puzzle-header {
+  text-align: center;
+  padding: 26px 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.puzzle-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Caveat", cursive;
+  font-size: 15px;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+}
+
+.puzzle-title {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(28px, 4.5vw, 50px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+.puzzle-subtitle {
+  font-family: "Caveat", cursive;
+  font-size: 16px;
+  color: var(--ink-soft);
+  max-width: 42ch;
+  line-height: 1.5;
+}
+
+/* ── Main Stage ── */
+.puzzle-stage {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px 16px;
+  gap: 0;
+}
+
+/* ── Heart outline drop zone ── */
+.heart-drop-zone {
+  position: relative;
+  width: 340px;
+  height: 320px;
+  flex-shrink: 0;
+}
+
+.heart-drop-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Heart outline dashes */
+.heart-outline-path {
+  fill: none;
+  stroke: rgba(232, 168, 156, 0.35);
+  stroke-width: 3;
+  stroke-dasharray: 10 6;
+  stroke-linecap: round;
+}
+
+.heart-outline-path.is-over {
+  stroke: var(--blush);
+  stroke-dasharray: none;
+  stroke-width: 3.5;
+  opacity: 0.7;
+  transition:
+    stroke 0.2s,
+    opacity 0.2s;
+}
+
+/* Slot labels inside the heart */
+.heart-slot-label {
+  position: absolute;
+  font-family: "Dancing Script", cursive;
+  font-size: 13px;
+  color: rgba(160, 140, 120, 0.5);
+  pointer-events: none;
+  letter-spacing: 0.04em;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+
+/* ── Placed pieces inside heart ── */
+.placed-piece {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  animation: pieceLand 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  pointer-events: none;
+}
+
+@keyframes pieceLand {
+  0% {
+    transform: scale(0.5) rotate(-8deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08) rotate(2deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.placed-letter {
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 8px rgba(46, 33, 24, 0.2);
+  line-height: 1;
+}
+
+/* ── Draggable pieces tray ── */
+.pieces-tray {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 20px;
+  padding: 8px 24px 4px;
+  width: 100%;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* ── Individual draggable piece ── */
+.drag-piece {
+  position: relative;
+  cursor: grab;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  border-radius: 20px;
+  touch-action: none;
+}
+
+.drag-piece:not(.placed):not(.dragging):hover {
+  transform: translateY(-6px) scale(1.05);
+}
+
+.drag-piece.dragging {
+  cursor: grabbing;
+  z-index: 999;
+  box-shadow: 0 16px 48px rgba(46, 33, 24, 0.22);
+}
+
+.drag-piece.placed {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.piece-inner {
+  width: 96px;
+  height: 96px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 6px 24px rgba(46, 33, 24, 0.12),
+    0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  position: relative;
+  overflow: hidden;
+}
+
+.piece-inner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.22),
+    transparent
+  );
+  border-radius: 20px 20px 0 0;
+  pointer-events: none;
+}
+
+.piece-letter {
+  font-family: "Dancing Script", cursive;
+  font-size: 52px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 3px 12px rgba(46, 33, 24, 0.25);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.piece-emoji {
+  font-size: 44px;
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(46, 33, 24, 0.2));
+}
+
+/* Piece label below */
+.piece-label {
+  text-align: center;
+  font-family: "Caveat", cursive;
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+}
+
+/* ── Envelope ── */
+.envelope-wrap {
+  position: absolute;
+  bottom: 80px;
+  left: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 20;
+}
+
+.envelope-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.25s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.envelope-btn:hover {
+  transform: translateY(-4px) rotate(-3deg);
+}
+
+.envelope-btn.opened {
+  animation: envelopeOpen 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes envelopeOpen {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.15) rotate(5deg);
+  }
+  70% {
+    transform: scale(0.95) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.envelope-label {
+  font-family: "Caveat", cursive;
+  font-size: 13px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* piece flying from envelope */
+.piece-fly {
+  position: fixed;
+  pointer-events: none;
+  z-index: 900;
+  animation: flyOut 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes flyOut {
+  0% {
+    transform: scale(0.4) rotate(-10deg);
+    opacity: 0.6;
+  }
+  60% {
+    transform: scale(1.12) rotate(4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* ── Sparkle particles ── */
+.sparkle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 800;
+  animation: sparklePop 0.7s ease-out forwards;
+}
+
+@keyframes sparklePop {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: var(--tx) var(--ty) scale(0);
+    opacity: 0;
+  }
+}
+
+/* ── Complete heart burst ── */
+.complete-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: burstGlow 0.8s ease-out forwards;
+}
+
+@keyframes burstGlow {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ── Finale overlay ── */
+.puzzle-finale {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: radial-gradient(
+    circle at center,
+    rgba(245, 237, 224, 0.98) 0%,
+    rgba(239, 228, 208, 1) 100%
+  );
+  text-align: center;
+  padding: 40px 28px;
+  animation: finaleIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes finaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.finale-hearts-row {
+  display: flex;
+  gap: 10px;
+  animation: heartsSwing 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes heartsSwing {
+  from {
+    transform: rotate(-3deg);
+  }
+  to {
+    transform: rotate(3deg);
+  }
+}
+
+.finale-big-text {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(52px, 10vw, 96px);
+  font-weight: 700;
+  color: var(--blush);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  animation: iluPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+}
+
+@keyframes iluPop {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.puzzle-finale h2 {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(30px, 5vw, 52px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.puzzle-finale h2 em {
+  color: var(--blush);
+  font-style: italic;
+}
+
+.puzzle-finale p {
+  font-family: "Caveat", cursive;
+  font-size: 18px;
+  color: var(--ink-soft);
+  max-width: 34ch;
+  line-height: 1.55;
+}
+
+.puzzle-finale-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 100px;
+  padding: 13px 26px;
+  font-family: "Caveat", cursive;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    transform 0.2s;
+  margin-top: 8px;
+  box-shadow: 0 4px 20px rgba(46, 33, 24, 0.18);
+}
+
+.puzzle-finale-btn:hover {
+  background: var(--ink-soft);
+  transform: translateY(-2px);
+}
+
+/* ── Footer ── */
+.puzzle-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 40px 20px;
+  font-size: 14px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  border-top: 1px solid rgba(160, 140, 120, 0.12);
+  background: linear-gradient(to top, rgba(239, 228, 208, 0.6), transparent);
+  width: 100%;
+}
+
+/* ── Mobile ── */
+@media (max-width: 500px) {
+  .heart-drop-zone {
+    width: 300px;
+    height: 280px;
+  }
+  .piece-inner {
+    width: 80px;
+    height: 80px;
+  }
+  .piece-letter {
+    font-size: 42px;
+  }
+  .piece-emoji {
+    font-size: 36px;
+  }
+  .pieces-tray {
+    gap: 8px;
+    padding-inline: 8px;
+  }
+  .envelope-wrap {
+    left: 16px;
+    bottom: 70px;
+  }
+}
+
+/* ── SVG piece land animation (keyframe for inline style reference) ── */
+@keyframes pieceLandSVG {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ── Ghost during drag — dim the source ── */
+.drag-piece.dragging {
+  opacity: 0.2 !important;
+}

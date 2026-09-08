@@ -1,0 +1,445 @@
+/* ══════════════════════════════════════════════
+   CHAPTER 5 — Beat My Heart
+   Warm paper · pulsing · intimate
+══════════════════════════════════════════════ */
+
+.beat-page {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  background: var(--paper);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Mount animation ── */
+.beat-page > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+.beat-page.is-mounted > * {
+  opacity: 1;
+  transform: none;
+}
+.beat-page.is-mounted .topbar {
+  transition-delay: 0.04s;
+}
+.beat-page.is-mounted .beat-header {
+  transition-delay: 0.18s;
+}
+.beat-page.is-mounted .beat-stage {
+  transition-delay: 0.32s;
+}
+.beat-page.is-mounted .beat-footer {
+  transition-delay: 0.52s;
+}
+
+/* ── Header ── */
+.beat-header {
+  text-align: center;
+  padding: 28px 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.beat-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Caveat", cursive;
+  font-size: 15px;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+}
+
+.beat-title {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(30px, 4.5vw, 52px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+.beat-subtitle {
+  font-family: "Caveat", cursive;
+  font-size: 17px;
+  color: var(--ink-soft);
+  max-width: 38ch;
+  line-height: 1.5;
+}
+
+/* ── BPM bar ── */
+.bpm-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 0 0;
+}
+
+.bpm-label {
+  font-family: "Caveat", cursive;
+  font-size: 15px;
+  color: var(--ink-faint);
+}
+
+.bpm-value {
+  font-family: "Dancing Script", cursive;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--blush);
+  min-width: 50px;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.bpm-beats {
+  display: flex;
+  gap: 4px;
+}
+
+.bpm-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blush-pale);
+  transition:
+    background 0.15s,
+    transform 0.15s;
+}
+
+.bpm-pip.active {
+  background: var(--blush);
+  transform: scale(1.3);
+}
+
+/* ── Main stage ── */
+.beat-stage {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 420px;
+  padding: 16px;
+}
+
+/* ── The clickable heart ── */
+.heart-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 10;
+  /* scale driven by JS class */
+  transition: filter 0.15s;
+}
+
+.heart-btn:focus-visible .heart-svg {
+  filter: drop-shadow(0 0 20px rgba(232, 168, 156, 0.9));
+}
+
+.heart-svg {
+  display: block;
+  width: clamp(200px, 38vw, 300px);
+  height: clamp(200px, 38vw, 300px);
+  transition: filter 0.2s;
+  filter: drop-shadow(0 8px 32px rgba(232, 168, 156, 0.35));
+}
+
+/* Heartbeat pulse — applied on click via JS */
+.heart-btn.beat .heart-svg {
+  animation: heartThump 0.38s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes heartThump {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1.18);
+  }
+  45% {
+    transform: scale(0.94);
+  }
+  65% {
+    transform: scale(1.1);
+  }
+  85% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Ambient idle pulse */
+.heart-btn:not(.beat) .heart-svg {
+  animation: idlePulse 2.2s ease-in-out infinite;
+}
+
+@keyframes idlePulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+/* Shockwave ring on click */
+.shockwave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: clamp(200px, 38vw, 300px);
+  height: clamp(200px, 38vw, 300px);
+  border-radius: 50%;
+  border: 3px solid var(--blush);
+  pointer-events: none;
+  animation: shockwaveOut 0.6s ease-out forwards;
+}
+
+@keyframes shockwaveOut {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* ── Click counter pill ── */
+.click-counter {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  background: rgba(245, 237, 224, 0.88);
+  border: 1px solid rgba(201, 150, 60, 0.2);
+  border-radius: 100px;
+  padding: 5px 16px;
+  font-family: "Caveat", cursive;
+  font-size: 15px;
+  color: var(--ink-soft);
+  backdrop-filter: blur(6px);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.click-counter span {
+  color: var(--blush);
+  font-weight: 600;
+}
+
+/* ── Floating "I love you" words ── */
+.love-word {
+  position: absolute;
+  pointer-events: none;
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+  white-space: nowrap;
+  z-index: 30;
+  animation: loveFloat 1.8s ease-out forwards;
+}
+
+@keyframes loveFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6) rotate(var(--rot));
+  }
+  12% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.05) rotate(var(--rot));
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(var(--rise)) scale(0.85) rotate(var(--rot));
+  }
+}
+
+/* ── Tap hint ── */
+.tap-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Caveat", cursive;
+  font-size: 15px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  animation: hintBlink 2s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+@keyframes hintBlink {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* ── Milestone flash ── */
+.milestone-flash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(22px, 4vw, 36px);
+  font-weight: 700;
+  color: var(--gold);
+  text-align: center;
+  pointer-events: none;
+  z-index: 40;
+  animation: milestoneAnim 1.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  white-space: nowrap;
+}
+
+@keyframes milestoneAnim {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.5);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(-50%, -60%) scale(1.08);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(-50%, -65%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -80%) scale(0.9);
+  }
+}
+
+/* ── Footer ── */
+.beat-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 40px 20px;
+  font-size: 14px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  border-top: 1px solid rgba(160, 140, 120, 0.12);
+  background: linear-gradient(to top, rgba(239, 228, 208, 0.6), transparent);
+  width: 100%;
+}
+
+/* ── Finale overlay ── */
+.beat-finale {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: radial-gradient(
+    circle at center,
+    rgba(245, 237, 224, 0.98) 0%,
+    rgba(239, 228, 208, 1) 100%
+  );
+  text-align: center;
+  padding: 40px 28px;
+  animation: fadeIn 0.7s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.beat-finale h2 {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(36px, 6vw, 68px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.beat-finale h2 em {
+  color: var(--blush);
+  font-style: italic;
+}
+
+.beat-finale p {
+  font-family: "Caveat", cursive;
+  font-size: 19px;
+  color: var(--ink-soft);
+  max-width: 34ch;
+  line-height: 1.55;
+}
+
+.beat-finale-count {
+  font-family: "Dancing Script", cursive;
+  font-size: 20px;
+  color: var(--ink-faint);
+}
+
+.beat-finale-count strong {
+  color: var(--blush);
+}
+
+.beat-finale-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 100px;
+  padding: 13px 26px;
+  font-family: "Caveat", cursive;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    transform 0.2s;
+  margin-top: 8px;
+  box-shadow: 0 4px 20px rgba(46, 33, 24, 0.18);
+}
+
+.beat-finale-btn:hover {
+  background: var(--ink-soft);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 500px) {
+  .beat-header {
+    padding: 20px 20px 0;
+  }
+}

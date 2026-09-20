@@ -1,0 +1,525 @@
+/* ══════════════════════════════════════════════
+   CHAPTER 8 — Memory Match
+   Scrapbook notes · kraft paper · wax seals
+══════════════════════════════════════════════ */
+
+.match-page {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+/* ── Mount animation ── */
+.match-page > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+.match-page.is-mounted > * {
+  opacity: 1;
+  transform: none;
+}
+.match-page.is-mounted .topbar {
+  transition-delay: 0.04s;
+}
+.match-page.is-mounted .match-header {
+  transition-delay: 0.18s;
+}
+.match-page.is-mounted .match-board {
+  transition-delay: 0.3s;
+}
+.match-page.is-mounted .match-footer {
+  transition-delay: 0.55s;
+}
+
+/* ── Header ── */
+.match-header {
+  text-align: center;
+  padding: 24px 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.match-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Caveat", cursive;
+  font-size: 15px;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+}
+
+.match-title {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(28px, 4.5vw, 50px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+.match-subtitle {
+  font-family: "Caveat", cursive;
+  font-size: 16px;
+  color: var(--ink-soft);
+  max-width: 42ch;
+  line-height: 1.5;
+}
+
+/* ── Score row ── */
+.match-score-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 10px 0 0;
+}
+
+.score-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Caveat", cursive;
+  font-size: 16px;
+  color: var(--ink-soft);
+}
+
+.score-chip strong {
+  font-size: 20px;
+  color: var(--blush);
+  font-weight: 700;
+  min-width: 20px;
+  text-align: center;
+}
+
+.score-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(160, 140, 120, 0.25);
+}
+
+/* ── Board ── */
+.match-board-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  padding: 12px 16px 0;
+  flex: 1;
+}
+
+/* Thread canvas sits behind cards */
+.thread-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.match-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 500px) {
+  .match-board {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+  }
+}
+
+/* ── Card ── */
+.mem-card {
+  aspect-ratio: 3/4;
+  position: relative;
+  cursor: pointer;
+  perspective: 800px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mem-card.is-matched {
+  cursor: default;
+}
+
+.mem-card:not(.is-flipped):not(.is-matched):hover .card-inner {
+  transform: rotateY(12deg) translateY(-3px);
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  border-radius: 12px;
+}
+
+.mem-card.is-flipped .card-inner,
+.mem-card.is-matched .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* ── Card faces ── */
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+/* ── BACK — kraft paper ── */
+.card-back {
+  background:
+    radial-gradient(
+      ellipse at 30% 20%,
+      rgba(255, 255, 255, 0.12) 0%,
+      transparent 60%
+    ),
+    linear-gradient(145deg, #c9a870 0%, #b8955a 40%, #c4a268 70%, #b08848 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow:
+    0 4px 16px rgba(46, 33, 24, 0.14),
+    0 1px 0 rgba(255, 255, 255, 0.25) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.08) inset;
+}
+
+/* Grain on kraft */
+.card-back::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+}
+
+/* Wax seal */
+.wax-seal {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #e87878, #c04040);
+  box-shadow:
+    0 3px 10px rgba(46, 33, 24, 0.25),
+    0 1px 0 rgba(255, 255, 255, 0.2) inset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wax-seal-letter {
+  font-family: "Dancing Script", cursive;
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  line-height: 1;
+}
+
+.card-back-label {
+  font-family: "Caveat", cursive;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── FRONT — cream paper ── */
+.card-front {
+  transform: rotateY(180deg);
+  background: linear-gradient(155deg, #faf5ec 0%, #f5ede0 60%, #f0e4d0 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 10px;
+  gap: 6px;
+  text-align: center;
+  box-shadow:
+    0 4px 16px rgba(46, 33, 24, 0.12),
+    0 1px 0 rgba(255, 255, 255, 0.8) inset;
+  border: 1px solid rgba(180, 155, 120, 0.2);
+}
+
+/* Subtle corner fold */
+.card-front::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(
+    225deg,
+    rgba(160, 140, 120, 0.2) 0%,
+    transparent 60%
+  );
+  border-radius: 0 0 12px 0;
+}
+
+.card-category {
+  font-family: "Caveat", cursive;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  line-height: 1;
+}
+
+.card-divider {
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  flex-shrink: 0;
+}
+
+.card-text {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(14px, 2.5vw, 18px);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+/* Matched — show a tiny heart */
+.card-matched-pip {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  color: var(--blush);
+  opacity: 0;
+  transition: opacity 0.4s 0.2s;
+}
+
+.is-matched .card-matched-pip {
+  opacity: 1;
+}
+
+/* ── Matched reveal toast ── */
+.match-toast-wrap {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(90vw, 380px);
+}
+
+.match-toast {
+  background: rgba(245, 237, 224, 0.97);
+  border: 1.5px solid rgba(201, 150, 60, 0.25);
+  border-radius: 18px;
+  padding: 16px 22px 14px;
+  text-align: center;
+  box-shadow:
+    0 12px 40px rgba(46, 33, 24, 0.14),
+    0 1px 0 rgba(255, 255, 255, 0.8) inset;
+  animation: toastSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  backdrop-filter: blur(12px);
+}
+
+@keyframes toastSlide {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.toast-eyebrow {
+  font-family: "Caveat", cursive;
+  font-size: 12px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.toast-message {
+  font-family: "Dancing Script", cursive;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.toast-heart-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+/* ── Wrong shake ── */
+.mem-card.is-wrong .card-inner {
+  animation: wrongShake 0.45s ease;
+}
+
+@keyframes wrongShake {
+  0%,
+  100% {
+    transform: rotateY(180deg) translateX(0);
+  }
+  20% {
+    transform: rotateY(180deg) translateX(-6px) rotate(-1.5deg);
+  }
+  40% {
+    transform: rotateY(180deg) translateX(6px) rotate(1.5deg);
+  }
+  60% {
+    transform: rotateY(180deg) translateX(-4px);
+  }
+  80% {
+    transform: rotateY(180deg) translateX(3px);
+  }
+}
+
+/* ── Finale ── */
+.match-finale {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgba(245, 237, 224, 0.99) 0%,
+    rgba(239, 228, 208, 1) 100%
+  );
+  text-align: center;
+  padding: 40px 28px;
+  animation: fadeIn 0.7s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.finale-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Caveat", cursive;
+  font-size: 14px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.finale-ribbon::before,
+.finale-ribbon::after {
+  content: "";
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+.finale-ribbon::after {
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+.match-finale h2 {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(34px, 6vw, 60px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.match-finale h2 em {
+  color: var(--blush);
+  font-style: italic;
+}
+
+.match-finale p {
+  font-family: "Caveat", cursive;
+  font-size: 18px;
+  color: var(--ink-soft);
+  max-width: 36ch;
+  line-height: 1.6;
+}
+
+.match-final-score {
+  font-family: "Dancing Script", cursive;
+  font-size: 18px;
+  color: var(--ink-faint);
+}
+
+.match-final-score strong {
+  color: var(--gold);
+}
+
+.match-finale-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 100px;
+  padding: 13px 26px;
+  font-family: "Caveat", cursive;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    transform 0.2s;
+  margin-top: 6px;
+  box-shadow: 0 4px 20px rgba(46, 33, 24, 0.18);
+}
+
+.match-finale-btn:hover {
+  background: var(--ink-soft);
+  transform: translateY(-2px);
+}
+
+/* ── Footer ── */
+.match-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 40px 20px;
+  font-size: 14px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  border-top: 1px solid rgba(160, 140, 120, 0.12);
+  background: linear-gradient(to top, rgba(239, 228, 208, 0.6), transparent);
+  width: 100%;
+}

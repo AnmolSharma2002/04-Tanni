@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Heart, Sparkles, ArrowRight, Play } from "lucide-react";
 import * as THREE from "three";
-import "./catchmyheart.css";
+import "./Catchmyheart.css";
 
 /* ══════════════════════════════════════════════
    CONSTANTS & CONFIG

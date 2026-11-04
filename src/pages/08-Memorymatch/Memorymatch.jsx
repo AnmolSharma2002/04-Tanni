@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Heart, Sparkles, ArrowRight, BookHeart } from "lucide-react";
-import "./Memorymatch.css";
+import "./MemoryMatch.css";
 
 /* ══════════════════════════════════════════════
    MEMORY PAIRS

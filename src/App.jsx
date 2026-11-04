@@ -650,10 +650,11 @@ function SharedMusic() {
 ───────────────────────────────────────────── */
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <SharedMusic />
       <Routes>
         <Route path="/" element={<CoverPage />} />
+        <Route path="/chapter/1" element={<CoverPage />} />
         <Route path="/chapter/2" element={<Chapter2Wrapper />} />
         <Route path="/chapter/3" element={<Chapter3Wrapper />} />
         <Route path="/chapter/4" element={<Chapter4Wrapper />} />

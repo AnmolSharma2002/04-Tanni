@@ -18,6 +18,8 @@ import HeartBeat from "./pages/06-beatTheHeart/HeartBeat.jsx";
 import ILoveYouPuzzle from "./pages/07-puzzle/HeartPuzzle.jsx";
 import Memorymatch from "./pages/08-Memorymatch/Memorymatch.jsx";
 import ComplimentGenerator from "./pages/09-ComplementGenerator/ComplementGenerator.jsx";
+import AeroJourney from "./pages/10-Aeroplane/Aeroplane.jsx";
+import LilyGarden from "./pages/11-Lily/Lily.jsx";
 import birthdayMusic from "./assets/bayside-breeze.mp3";
 
 // Pages with their own audio controls manage music locally.
@@ -559,6 +561,30 @@ function Chapter9Wrapper() {
   );
 }
 
+function Chapter10Wrapper() {
+  const navigate = useNavigate();
+  return (
+    <>
+      <div className="canvas-wrap" aria-hidden="true">
+        <ThreeCanvas />
+      </div>
+      <AeroJourney onNext={() => navigate("/chapter/11")} />
+    </>
+  );
+}
+
+function Chapter11Wrapper() {
+  const navigate = useNavigate();
+  return (
+    <>
+      <div className="canvas-wrap" aria-hidden="true">
+        <ThreeCanvas />
+      </div>
+      <LilyGarden onNext={() => navigate("/chapter/12")} />
+    </>
+  );
+}
+
 function SharedMusic() {
   const { pathname } = useLocation();
   const audioRef = useRef(null);
@@ -636,6 +662,8 @@ export default function App() {
         <Route path="/chapter/7" element={<Chapter7Wrapper />} />
         <Route path="/chapter/8" element={<Chapter8Wrapper />} />
         <Route path="/chapter/9" element={<Chapter9Wrapper />} />
+        <Route path="/chapter/10" element={<Chapter10Wrapper />} />
+        <Route path="/chapter/11" element={<Chapter11Wrapper />} />
         {/* Add /chapter/3 … /chapter/22 here as you build them */}
       </Routes>
     </BrowserRouter>

@@ -1,0 +1,778 @@
+/* ══════════════════════════════════════════════
+   CHAPTER 11 — A Lily Garden For You
+   Purple dusk · water lily pond · lantern glow
+══════════════════════════════════════════════ */
+
+.lily-page {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: "Caveat", cursive;
+  /* Deep purple-indigo dusk sky to water gradient */
+  background:
+    radial-gradient(
+      ellipse 120% 60% at 50% 0%,
+      #1a0a2e 0%,
+      #2d1155 30%,
+      #4a1870 50%,
+      #6b2d8a 65%,
+      #8b4a6e 75%,
+      #a06858 82%,
+      #b8845a 88%,
+      #c49a6a 93%,
+      transparent 100%
+    ),
+    radial-gradient(
+      ellipse 100% 80% at 50% 100%,
+      #0d1a2e 0%,
+      #0f2040 40%,
+      #162840 70%,
+      transparent 100%
+    ),
+    linear-gradient(
+      180deg,
+      #150828 0%,
+      #2a0f4a 18%,
+      #4a1870 30%,
+      #7a3060 42%,
+      #5a3848 55%,
+      #1a2838 70%,
+      #0d1f30 85%,
+      #081520 100%
+    );
+}
+
+/* ── Topbar — same DNA ── */
+.lily-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px 14px;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 5, 30, 0.75) 0%,
+    transparent 100%
+  );
+  backdrop-filter: blur(6px);
+}
+
+.lily-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.9);
+}
+.lily-wordmark-initial {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(232, 168, 156, 0.85);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-family: "Dancing Script", cursive;
+  font-size: 22px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(232, 168, 156, 0.4);
+}
+.lily-wordmark-text {
+  font-family: "Dancing Script", cursive;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.lily-chapter {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.05em;
+}
+.lily-chapter strong {
+  color: rgba(255, 255, 255, 0.6);
+}
+.lily-chapter em {
+  font-style: normal;
+  color: rgba(232, 168, 156, 0.7);
+}
+
+/* ── Header text ── */
+.lily-header {
+  text-align: center;
+  padding: 14px 24px 0;
+  position: relative;
+  z-index: 10;
+}
+
+.lily-title {
+  font-family: "Dancing Script", cursive;
+  font-size: clamp(32px, 5.5vw, 62px);
+  font-weight: 700;
+  color: #ffecd8;
+  line-height: 1.15;
+  text-shadow:
+    0 0 40px rgba(255, 180, 100, 0.5),
+    0 2px 20px rgba(232, 168, 156, 0.4);
+}
+
+.lily-title-heart {
+  color: #f5a0b0;
+  font-style: normal;
+}
+
+.lily-desc {
+  font-size: 16px;
+  color: rgba(255, 235, 210, 0.75);
+  margin-top: 6px;
+  letter-spacing: 0.02em;
+}
+
+.lily-hint {
+  font-size: 14px;
+  color: rgba(255, 200, 180, 0.6);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ── Side text decorations (like the reference) ── */
+.garden-sign {
+  position: absolute;
+  left: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  text-align: center;
+  max-width: 120px;
+}
+.garden-sign-board {
+  background: linear-gradient(160deg, #5c3a1e, #3d2510);
+  border: 2px solid #7a5030;
+  border-radius: 8px;
+  padding: 16px 12px;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 200, 100, 0.1) inset;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 220, 170, 0.85);
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+  text-transform: uppercase;
+}
+.garden-sign-post {
+  width: 8px;
+  height: 40px;
+  background: linear-gradient(to bottom, #7a5030, #5c3a1e);
+  margin: 0 auto;
+  border-radius: 0 0 3px 3px;
+}
+
+.garden-quote-right {
+  position: absolute;
+  right: 24px;
+  top: 52%;
+  transform: translateY(-50%);
+  z-index: 50;
+  max-width: 180px;
+  text-align: right;
+}
+.garden-quote-right p {
+  font-family: "Dancing Script", cursive;
+  font-size: 16px;
+  color: rgba(255, 220, 200, 0.65);
+  line-height: 1.55;
+  font-style: italic;
+}
+.garden-quote-right svg {
+  display: block;
+  margin-left: auto;
+  margin-top: 6px;
+  color: rgba(245, 160, 176, 0.5);
+}
+
+/* ── Bottom stone sign (watch all bloom) ── */
+.stone-sign {
+  position: absolute;
+  bottom: 120px;
+  left: 40px;
+  z-index: 50;
+}
+.stone-sign-rock {
+  background: radial-gradient(ellipse, #4a3a2e, #2a1f14);
+  border-radius: 50% 45% 55% 48% / 55% 52% 48% 45%;
+  padding: 18px 16px;
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.6),
+    0 1px 0 rgba(255, 200, 100, 0.08) inset;
+  text-align: center;
+  width: 100px;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.stone-sign-rock:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.7);
+}
+.stone-sign-rock p {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 200, 140, 0.75);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+.stone-sign-rock .stone-play {
+  color: rgba(255, 200, 140, 0.6);
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+.stone-you {
+  position: absolute;
+  bottom: 100px;
+  right: 30px;
+  z-index: 50;
+}
+.stone-you-rock {
+  background: radial-gradient(ellipse at 40% 40%, #5a4535, #2e1f10);
+  border-radius: 48% 52% 45% 55% / 52% 48% 55% 45%;
+  padding: 22px 18px 18px;
+  width: 130px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+}
+.stone-you-rock p {
+  font-family: "Dancing Script", cursive;
+  font-size: 17px;
+  color: rgba(255, 210, 160, 0.75);
+  line-height: 1.4;
+  text-align: center;
+  font-style: italic;
+}
+
+/* ── POND SCENE ── */
+.pond-scene {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  min-height: 480px;
+}
+
+/* Water surface — reflects the dusk */
+.water-surface {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 75%;
+  background: linear-gradient(
+    180deg,
+    rgba(40, 20, 70, 0.4) 0%,
+    rgba(20, 35, 65, 0.7) 30%,
+    rgba(10, 20, 50, 0.85) 60%,
+    rgba(5, 10, 30, 0.95) 100%
+  );
+  /* Subtle water shimmer */
+  overflow: hidden;
+}
+
+.water-shimmer {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    rgba(255, 200, 180, 0.025) 2px,
+    transparent 4px,
+    transparent 40px
+  );
+  animation: shimmerMove 4s linear infinite;
+}
+
+@keyframes shimmerMove {
+  from {
+    transform: translateX(-40px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Background mountain silhouette */
+.mountains {
+  position: absolute;
+  bottom: 60%;
+  left: 0;
+  right: 0;
+  height: 28%;
+  background:
+    radial-gradient(ellipse 40% 100% at 20% 100%, #2a1040 0%, transparent 100%),
+    radial-gradient(ellipse 30% 100% at 50% 100%, #1e0c35 0%, transparent 100%),
+    radial-gradient(ellipse 40% 100% at 80% 100%, #261040 0%, transparent 100%);
+  opacity: 0.7;
+}
+
+/* ── LANTERNS ── */
+.lantern {
+  position: absolute;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lantern-body {
+  width: 18px;
+  height: 26px;
+  border-radius: 5px 5px 8px 8px;
+  position: relative;
+  box-shadow:
+    0 0 20px var(--glow),
+    0 0 40px var(--glow-far);
+  overflow: hidden;
+}
+
+.lantern-body::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    white 0%,
+    var(--inner) 40%,
+    transparent 100%
+  );
+  border-radius: 3px;
+  opacity: 0.9;
+}
+
+.lantern-body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 5px 5px 0 0;
+}
+
+.lantern-post {
+  width: 2px;
+  background: rgba(120, 80, 40, 0.8);
+}
+
+.lantern-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--glow);
+  filter: blur(8px);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: lanternFlicker 3s ease-in-out infinite;
+}
+
+@keyframes lanternFlicker {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  33% {
+    opacity: 0.5;
+  }
+  66% {
+    opacity: 0.25;
+  }
+}
+
+/* Flying sky lanterns */
+.sky-lantern {
+  position: absolute;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.sky-lantern-body {
+  width: 14px;
+  height: 20px;
+  border-radius: 50% 50% 40% 40%;
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgba(255, 220, 100, 0.95),
+    rgba(255, 160, 60, 0.7)
+  );
+  box-shadow:
+    0 0 12px rgba(255, 200, 80, 0.8),
+    0 0 30px rgba(255, 150, 50, 0.4);
+  animation: skyLanternFloat var(--dur) ease-in-out infinite;
+}
+
+@keyframes skyLanternFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+/* ── LILY PADS ── */
+.lily-pad {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 40% 35%, #2d5a2a, #1a3d18);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(50, 120, 40, 0.3);
+  transform-origin: center;
+}
+
+/* Notch on lily pad */
+.lily-pad::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 50%;
+  background: radial-gradient(ellipse at 50% 0%, #1a3518, transparent);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  opacity: 0.7;
+}
+
+/* ── THE LILY FLOWERS ── */
+.lily-wrap {
+  position: absolute;
+  cursor: pointer;
+  z-index: 30;
+  transform-origin: bottom center;
+  transition: filter 0.3s;
+}
+
+.lily-wrap:hover .lily-svg,
+.lily-wrap.bloomed .lily-svg {
+  filter: drop-shadow(0 0 18px var(--petal-glow))
+    drop-shadow(0 0 40px var(--petal-glow-far));
+}
+
+.lily-svg {
+  display: block;
+  transition: filter 0.4s;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+/* Bud state — petals closed */
+.lily-wrap:not(.bloomed) .petal {
+  transform-origin: 50% 100%;
+  transform: rotate(0deg) scaleY(0.55);
+}
+
+/* Bloom state — petals open */
+.lily-wrap.bloomed .petal {
+  animation: petalOpen 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes petalOpen {
+  from {
+    transform-origin: 50% 100%;
+    transform: rotate(var(--rot)) scaleY(0.55);
+  }
+  to {
+    transform-origin: 50% 100%;
+    transform: rotate(var(--rot)) scaleY(1);
+  }
+}
+
+/* Ground glow when bloomed */
+.lily-wrap.bloomed .lily-glow {
+  opacity: 1;
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+.lily-glow {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--petal-glow);
+  filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translateX(-50%) scaleX(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1.2);
+  }
+}
+
+/* Sparkle particles on bloom */
+.lily-sparkles {
+  position: absolute;
+  inset: -20px;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.sparkle-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--petal-glow);
+  opacity: 0;
+}
+
+.lily-wrap.bloomed .sparkle-dot {
+  animation: sparkleFly var(--s-dur) ease-out var(--s-delay) forwards;
+}
+
+@keyframes sparkleFly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: var(--s-tx) var(--s-ty) scale(0);
+  }
+}
+
+/* ── POPUP CARD ── */
+.lily-popup {
+  position: fixed;
+  z-index: 300;
+  pointer-events: all;
+  animation: popupIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transform-origin: bottom center;
+}
+
+@keyframes popupIn {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.lily-popup-card {
+  background: rgba(253, 247, 238, 0.97);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(201, 150, 60, 0.2);
+  border-radius: 18px;
+  padding: 20px 22px 18px;
+  width: 220px;
+  text-align: center;
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  position: relative;
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: none;
+  color: rgba(120, 100, 80, 0.5);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 50%;
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+.popup-close:hover {
+  color: rgba(80, 50, 30, 0.8);
+  background: rgba(160, 140, 120, 0.12);
+}
+
+.popup-lily-num {
+  font-family: "Caveat", cursive;
+  font-size: 13px;
+  color: rgba(150, 110, 60, 0.8);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.popup-message {
+  font-family: "Dancing Script", cursive;
+  font-size: 19px;
+  font-weight: 600;
+  color: #2e2118;
+  line-height: 1.45;
+}
+
+.popup-heart {
+  margin-top: 10px;
+  color: #e8a89c;
+  font-size: 18px;
+}
+
+/* Triangle tail pointing down */
+.popup-tail {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid rgba(253, 247, 238, 0.97);
+  margin: 0 auto;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.15));
+}
+
+/* ── Bottom bar ── */
+.lily-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px 18px;
+  background: linear-gradient(to top, rgba(8, 10, 25, 0.88), transparent);
+  backdrop-filter: blur(4px);
+  gap: 16px;
+}
+
+.lily-count-text {
+  font-family: "Dancing Script", cursive;
+  font-size: 22px;
+  color: rgba(255, 235, 210, 0.8);
+  white-space: nowrap;
+}
+
+.lily-count-text strong {
+  color: #f5c8c0;
+}
+
+.lily-progress-bar {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  max-width: 200px;
+}
+
+.lily-progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(232, 168, 156, 0.6),
+    rgba(245, 160, 100, 0.8)
+  );
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+.lily-blossomed-label {
+  font-family: "Caveat", cursive;
+  font-size: 14px;
+  color: rgba(255, 200, 160, 0.55);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.lily-special-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid rgba(255, 200, 160, 0.35);
+  border-radius: 100px;
+  padding: 9px 20px;
+  font-family: "Caveat", cursive;
+  font-size: 15px;
+  color: rgba(255, 220, 190, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: all 0.25s;
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+}
+.lily-special-btn:hover {
+  background: rgba(232, 168, 156, 0.18);
+  border-color: rgba(232, 168, 156, 0.6);
+  color: white;
+}
+
+/* ── All bloom animation ── */
+.bloom-all-trigger .lily-wrap:not(.bloomed) {
+  animation: bloomDelay 0.1s ease forwards;
+}
+
+@keyframes bloomDelay {
+  to {
+    /* triggers JS */
+  }
+}
+
+/* ── Footer ── */
+.lily-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 40px 80px;
+  font-size: 14px;
+  color: rgba(255, 200, 170, 0.35);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 640px) {
+  .lily-topbar {
+    padding: 12px 16px;
+  }
+  .lily-wordmark-text {
+    display: none;
+  }
+  .garden-sign,
+  .garden-quote-right,
+  .stone-sign,
+  .stone-you {
+    display: none;
+  }
+  .lily-bottom-bar {
+    padding: 10px 16px 14px;
+    gap: 8px;
+  }
+  .lily-count-text {
+    font-size: 18px;
+  }
+  .lily-special-btn {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+}
